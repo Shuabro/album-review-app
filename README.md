@@ -62,3 +62,21 @@ The frontend is set up and the first version of the home page UI is complete. Ne
 cd frontend
 npm install
 ng serve****
+
+Open http://localhost:4200 in your browser.
+
+Roadmap
+Phase 1
+Build core frontend pages
+Set up routes and navigation
+Create albums page UI
+Create add album page UI
+Phase 2
+Add backend API
+Add database schema
+Store albums, songs, and reviews
+Connect frontend to backend
+Phase 3
+Add multi-user review support
+Add stats and comparison features
+Deploy online for shared use
