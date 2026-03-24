@@ -1,0 +1,499 @@
+.dashboard-container {
+  max-width: 900px;
+  margin: 24px auto 0 auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.dashboard-header h1 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin: 0 0 0 0;
+  letter-spacing: -1px;
+}
+
+.dashboard-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.quick-stats {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 12px;
+  min-width: 80px;
+  background: #f5f7fa;
+  box-shadow: none;
+}
+
+.stat-card mat-icon {
+  color: #1976d2;
+  margin-bottom: 1px;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.stat-label {
+  font-size: 0.92rem;
+  color: #888;
+}
+
+.next-review-section {
+  margin-top: 0;
+}
+
+.next-review-section h2 {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+  margin-top: 0;
+}
+
+.next-review-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  max-width: 400px;
+}
+
+.next-review-card img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.next-review-card .album-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.next-review-card .album-artist {
+  font-size: 0.97rem;
+  color: #666;
+}
+
+.next-review-card .album-rating {
+  display: flex;
+  align-items: center;
+  color: #ffb300;
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+.next-review-card .review-date {
+  font-size: 0.93rem;
+  color: #888;
+  margin-top: 1px;
+}
+
+.recently-reviewed-section h2,
+.latest-notes-section h2 {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+  margin-top: 0;
+}
+
+.recently-reviewed-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.album-card {
+  width: 120px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.album-card img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.album-card .album-title {
+  font-size: 0.97rem;
+  font-weight: 500;
+  margin-top: 3px;
+}
+
+.album-card .album-artist {
+  font-size: 0.92rem;
+  color: #666;
+}
+
+.album-card .album-rating {
+  display: flex;
+  align-items: center;
+  color: #ffb300;
+  font-size: 0.92rem;
+}
+
+.latest-notes-section mat-list-item {
+  padding: 3px 0;
+}
+
+.note-snippet {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+@media (max-width: 700px) {
+  .dashboard-container {
+    padding: 0 2px;
+  }
+  .quick-stats,
+  .recently-reviewed-list {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+.home-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fafafa;
+  min-height: 100vh;
+}
+
+/* Page Header */
+.page-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #1976d2;
+}
+
+.page-header p {
+  margin: 8px 0 0 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Next Review Section */
+.next-review-section {
+  margin-bottom: 40px;
+}
+
+.next-review-section h2 {
+  margin-bottom: 16px;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.next-review-card {
+  max-width: 700px;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 12px;
+}
+
+.next-review-content {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  padding: 32px;
+}
+
+.album-cover {
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  object-fit: cover;
+}
+
+.album-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.album-info .artist {
+  margin: 0 0 4px 0;
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.album-info .year {
+  margin: 0 0 24px 0;
+  font-size: 1rem;
+  color: #999;
+}
+
+.review-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  padding: 12px 24px;
+  border-radius: 8px;
+}
+
+/* Main Grid Layout */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* Stats Section */
+.stats-section h2,
+.recently-reviewed-section h2 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  min-height: 120px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.stat-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #1976d2;
+}
+
+.stat-info h3 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.stat-info p {
+  margin: 4px 0 0 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Recently Reviewed Section */
+.albums-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.album-card {
+  transition: transform 0.2s ease-in-out;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.album-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.album-card img {
+  aspect-ratio: 1;
+  object-fit: cover;
+  width: 100%;
+}
+
+.album-card h4 {
+  margin: 12px 0 4px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.album-card .artist {
+  margin: 0 0 8px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.album-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ff9800;
+  font-weight: 600;
+}
+
+.rating mat-icon {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.year {
+  color: #999;
+}
+
+/* Notes Section */
+.notes-section {
+  margin-bottom: 40px;
+}
+
+.notes-section h2 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.notes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.note-card {
+  border-left: 4px solid #1976d2;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.note-header h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.note-date {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.note-artist {
+  margin: 0 0 12px 0;
+  color: #666;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.note-text {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    padding: 16px;
+  }
+  
+  .page-header h1 {
+    font-size: 2rem;
+  }
+  
+  .next-review-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+  
+  .album-cover {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .albums-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .notes-list {
+    grid-template-columns: 1fr;
+  }
+}
