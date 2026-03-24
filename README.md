@@ -49,6 +49,36 @@ I wanted to build something that is both personally useful and a good software e
 Early development.
 
 The frontend is set up and the first version of the home page UI is complete. Next steps include building the albums page, planning the data model, and starting the backend/API.
+**Roadmap**
+
+**Phase 1**
+
+Build core frontend pages
+
+Set up routes and navigation
+
+Create albums page UI
+
+Create add album page UI
+
+**Phase 2**
+
+Add backend API
+
+Add database schema
+
+Store albums, songs, and reviews
+
+Connect frontend to backend
+
+**Phase 3**
+
+Add multi-user review support
+
+Add stats and comparison features
+
+Deploy online for shared use
+
 
 ## Getting Started
 
@@ -65,18 +95,3 @@ ng serve****
 
 Open http://localhost:4200 in your browser.
 
-Roadmap
-Phase 1
-Build core frontend pages
-Set up routes and navigation
-Create albums page UI
-Create add album page UI
-Phase 2
-Add backend API
-Add database schema
-Store albums, songs, and reviews
-Connect frontend to backend
-Phase 3
-Add multi-user review support
-Add stats and comparison features
-Deploy online for shared use
