@@ -1,5 +1,5 @@
 <div class="dashboard-container">
-  <div class="dashboard-header">
+  <!-- <div class="dashboard-header">
     <h1>{{ dashboardTitle }}</h1>
     <div class="dashboard-subtitle">{{ dashboardSubtitle }}</div>
     <div class="quick-stats">
@@ -9,23 +9,30 @@
         <div class="stat-label">{{ stat.label }}</div>
       </mat-card>
     </div>
-  </div>
+  </div> -->
 
+
+  <!-- Next Review at the top -->
   <section class="next-review-section">
     <h2>Next Review</h2>
-    <mat-card class="next-review-card">
-      <img mat-card-image [src]="nextReview.cover" alt="Album cover" />
-      <mat-card-content>
-        <div class="album-title">{{ nextReview.title }}</div>
-        <div class="album-artist">{{ nextReview.artist }}</div>
-        <div class="album-rating">
-          <mat-icon>star</mat-icon> {{ nextReview.rating }}
+    <mat-card class="next-review-card big-next-review">
+      <div class="next-review-row">
+        <div class="next-review-img-container">
+          <img [src]="nextReview.cover" alt="Album cover" />
         </div>
-        <div class="review-date">Review on {{ nextReview.reviewDate }}</div>
-      </mat-card-content>
+        <div class="next-review-details">
+          <div class="album-title">{{ nextReview.title }}</div>
+          <div class="album-artist">{{ nextReview.artist }}</div>
+          <div class="album-rating">
+            <mat-icon>star</mat-icon> {{ nextReview.rating }}
+          </div>
+          <div class="review-date">Review on {{ nextReview.reviewDate }}</div>
+        </div>
+      </div>
     </mat-card>
   </section>
 
+  <!-- Recently Reviewed below Next Review -->
   <section class="recently-reviewed-section">
     <h2>Recently Reviewed</h2>
     <div class="recently-reviewed-list">
@@ -41,39 +48,5 @@
       </mat-card>
     </div>
   </section>
-
-  <section class="latest-notes-section">
-    <h2>Latest Review Notes</h2>
-    <mat-list>
-      <mat-list-item *ngFor="let note of latestNotes">
-        <mat-icon matListIcon>note</mat-icon>
-        <div matLine>{{ note.album }}</div>
-        <div matLine class="note-snippet">{{ note.note }}</div>
-      </mat-list-item>
-    </mat-list>
-  </section>
 </div>
-            <button mat-stroked-button>View Review</button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </section>
-  </div>
 
-  <!-- Latest Review Notes Section -->
-  <section class="notes-section">
-    <h2>Latest Review Notes</h2>
-    <div class="notes-list">
-      <mat-card class="note-card" *ngFor="let note of latestNotes">
-        <mat-card-content>
-          <div class="note-header">
-            <h4>{{ note.album }}</h4>
-            <span class="note-date">{{ note.date }}</span>
-          </div>
-          <p class="note-artist">{{ note.artist }}</p>
-          <p class="note-text">"{{ note.note }}"</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </section>
-</div>

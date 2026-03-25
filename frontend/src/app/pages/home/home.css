@@ -1,3 +1,11 @@
+.next-review-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 40px;
+}
 .dashboard-container {
   max-width: 900px;
   margin: 24px auto 0 auto;
@@ -69,19 +77,65 @@
   margin-top: 0;
 }
 
+
 .next-review-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  max-width: 400px;
+  gap: 28px;
+  padding: 24px 32px;
+  max-width: 650px;
+  margin-bottom: 18px;
+  background: #f7f7fa;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
 }
 
-.next-review-card img {
-  width: 70px;
-  height: 70px;
+.big-next-review .next-review-img-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  width: 160px;
+  background: #eaeaea;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.big-next-review .next-review-img-container img {
+  width: 150px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+}
+
+.big-next-review .next-review-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.big-next-review .album-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.big-next-review .album-artist {
+  font-size: 1.08rem;
+  color: #666;
+}
+
+.big-next-review .album-rating {
+  display: flex;
+  align-items: center;
+  color: #ffb300;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.big-next-review .review-date {
+  font-size: 1.01rem;
+  color: #888;
 }
 
 .next-review-card .album-title {

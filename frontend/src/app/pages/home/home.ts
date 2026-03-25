@@ -23,7 +23,7 @@ export class Home {
   dashboardSubtitle = 'Your country album review hub';
 
   nextReview = {
-    cover: 'https://via.placeholder.com/120',
+    cover: 'https://m.media-amazon.com/images/I/911224fr8eL._UF1000,1000_QL80_.jpg',
     title: 'Golden Hour',
     artist: 'Kacey Musgraves',
     rating: 9.5,
