@@ -48,36 +48,29 @@ I wanted to build something that is both personally useful and a good software e
 
 Early development.
 
-The frontend is set up and the first version of the home page UI is complete. Next steps include building the albums page, planning the data model, and starting the backend/API.
-**Roadmap**
+The app now has a working Angular frontend with core pages scaffolded (home, albums, add album, detail, and stats), plus an initial .NET backend project with database models and migrations.
 
-**Phase 1**
+## Roadmap
 
-Build core frontend pages
+### Phase 1 (Complete)
 
-Set up routes and navigation
+- Build core frontend pages
+- Set up routes and navigation
+- Create albums page UI
+- Create add album page UI
 
-Create albums page UI
+### Phase 2 (In Progress)
 
-Create add album page UI
+- Set up backend API project
+- Define initial database schema (albums, artists, songs)
+- Build album/review CRUD endpoints
+- Connect frontend to backend data
 
-**Phase 2**
+### Phase 3 (Planned)
 
-Add backend API
-
-Add database schema
-
-Store albums, songs, and reviews
-
-Connect frontend to backend
-
-**Phase 3**
-
-Add multi-user review support
-
-Add stats and comparison features
-
-Deploy online for shared use
+- Add shared reviews for multiple users
+- Add stats, rankings, and comparison views
+- Deploy online for shared use
 
 
 ## Getting Started
@@ -91,7 +84,8 @@ Deploy online for shared use
 ```bash
 cd frontend
 npm install
-ng serve****
+ng serve
+```
 
 Open http://localhost:4200 in your browser.
 
