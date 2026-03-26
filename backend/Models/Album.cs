@@ -13,4 +13,7 @@ public class Album
     public int ReviewCount { get; set; }
     public Genre? Genre { get; set; }    
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    // Navigation properties
+    public Artist? Artist { get; set; }
+    public ICollection<Song>? Songs { get; set; }
 }

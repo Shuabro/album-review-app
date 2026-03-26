@@ -1,12 +1,8 @@
-using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
 using OfficeOpenXml;
 using backend.Data;
 using backend.Models;
 using backend.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Import
 {
@@ -137,6 +133,7 @@ namespace backend.Import
                 _context.SaveChanges(); // Save album to get its Id
                 Console.WriteLine($"Added album: {albumTitle} by {artistName}");
 
+                string userId = "6a3b6c9b-4c11-411b-8c37-a1cb3fa29faa"; // Fixed user Id
                 for (int row = 5; row <= 24; row++)
                 {
                     string songTitle = worksheet.Cells[row, col].Text.Trim();
@@ -145,13 +142,23 @@ namespace backend.Import
                         // Stop processing songs for this album when an empty cell is reached
                         break;
                     }
+                    int rank = row - 4; // Row 5 = rank 1, etc.
                     var song = new Song
                     {
                         Title = songTitle,
                         AlbumId = album.Id,
-                        Rank = row - 4
                     };
                     _context.Songs.Add(song);
+                    _context.SaveChanges(); // Save to get song.Id
+
+                    var ranking = new UserSongRanking
+                    {
+                        UserId = userId,
+                        SongId = song.Id,
+                        AlbumId = album.Id,
+                        Rank = rank
+                    };
+                    _context.UserSongRankings.Add(ranking);
                 }
             }
             try

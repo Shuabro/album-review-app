@@ -6,5 +6,7 @@ public class Song
     public string Title { get; set; } = string.Empty;
     public int AlbumId { get; set; }
     public int TrackNumber { get; set; }   
-    public int Rank { get; set; }    
+
+    // Navigation property
+    public Album? Album { get; set; }
 }
