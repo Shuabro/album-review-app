@@ -1,1 +1,81 @@
-<p>albums works!</p>
+<section class="albums-page">
+	<header class="page-header">
+		<div>
+			<h1>Albums</h1>
+			<p class="header-subtitle">Browse and explore your country album collection.</p>
+		</div>
+		<div class="header-count" *ngIf="!isLoading && !errorMessage">
+			{{ visibleAlbums.length }} {{ visibleAlbums.length === 1 ? 'album' : 'albums' }}
+		</div>
+	</header>
+
+	<section class="controls" *ngIf="!isLoading && !errorMessage">
+		<mat-form-field appearance="outline" class="search-field">
+			<mat-label>Search by album or artist</mat-label>
+			<input matInput [(ngModel)]="searchQuery" placeholder="Type to filter..." />
+			<mat-icon matSuffix>search</mat-icon>
+		</mat-form-field>
+
+		<mat-form-field appearance="outline" class="sort-field">
+			<mat-label>Sort by</mat-label>
+			<mat-select [(ngModel)]="sortBy">
+				<mat-option value="artist">Artist name</mat-option>
+				<mat-option value="newest">Newest added</mat-option>
+				<mat-option value="highestRated">Highest rated</mat-option>
+				<mat-option value="mostReviewed">Most reviewed</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</section>
+
+	<p *ngIf="isLoading" class="status">Loading albums...</p>
+
+	<p *ngIf="errorMessage" class="status error">{{ errorMessage }}</p>
+
+	<div *ngIf="!isLoading && !errorMessage && visibleAlbums.length === 0" class="status">
+		No albums found.
+	</div>
+
+	<div class="album-grid" *ngIf="!isLoading && !errorMessage && visibleAlbums.length > 0">
+		<mat-card
+			class="album-card"
+			*ngFor="let album of visibleAlbums; trackBy: trackByAlbumId"
+			(click)="onAlbumOpen(album)"
+			(tabindex)="0"
+			(keydown.enter)="onAlbumOpen(album)"
+		>
+			<div class="cover-wrap">
+				<img
+					*ngIf="album.coverImageUrl; else coverFallback"
+					mat-card-image
+					[src]="getCoverUrl(album.coverImageUrl)"
+					[alt]="album.title + ' cover'"
+				/>
+				<ng-template #coverFallback>
+					<div class="cover-fallback">
+						<mat-icon>album</mat-icon>
+					</div>
+				</ng-template>
+			</div>
+
+			<mat-card-content class="card-content">
+				<h3 class="album-title">{{ album.title }}</h3>
+				<p class="album-artist">{{ getArtistName(album) }}</p>
+
+				<div class="album-meta">
+					<span *ngIf="album.releaseYear">{{ album.releaseYear }}</span>
+				</div>
+
+				<!--
+				<div class="album-stats">
+					<span>Rating: {{ album.rating }}</span>
+					<span>Reviews: {{ album.reviewCount }}</span>
+				</div>
+				-->
+
+				<div class="card-actions">
+					<button mat-stroked-button color="primary" type="button">View Album</button>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</section>
