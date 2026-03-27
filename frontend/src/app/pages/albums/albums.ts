@@ -8,22 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-
-type Album = {
-  id: number;
-  title: string;
-  artistId: number;
-  releaseYear?: number | null;
-  coverImageUrl?: string | null;
-  rating: number;
-  reviewCount: number;
-  genre?: number | null;
-  createdAt: string;
-  artist?: {
-    id: number;
-    name: string;
-  } | null;
-};
+import { IAlbum } from '../../../interfaces/Album';
+import { AlbumService } from '../../services/album-service';
+import { Subscription } from 'rxjs';
 
 type AlbumSort = 'artist' | 'newest' | 'highestRated' ;
 
@@ -44,20 +31,37 @@ type AlbumSort = 'artist' | 'newest' | 'highestRated' ;
   styleUrl: './albums.css',
 })
 export class Albums implements OnInit {
-  private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/Album';
+  albumSubscription: Subscription | undefined;
 
-  albums: Album[] = [];
+  constructor(
+              private albumService: AlbumService
+             ) {} 
+
+  albums: IAlbum[] = [];
   isLoading = false;
   errorMessage = '';
   searchQuery = '';
   sortBy: AlbumSort = 'artist';
 
   ngOnInit(): void {
-    this.loadAlbums();
+    this.albumSubscription = this.albumService.$albums.subscribe({
+      next: (albums: IAlbum[]) => {
+        this.albums = albums;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Failed to load albums.';
+        this.isLoading = false;
+      }
+    });
+    this.albumService.getAlbums();
+  }
+  
+  ngOnDestroy(): void {
+    this.albumSubscription?.unsubscribe();
   }
 
-  get visibleAlbums(): Album[] {
+  get visibleAlbums(): IAlbum[] {
     const query = this.searchQuery.trim().toLowerCase();
 
     let filtered = this.albums;
@@ -86,19 +90,11 @@ export class Albums implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.http.get<Album[]>(this.apiUrl).subscribe({
-      next: (albums) => {
-        this.albums = albums;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Unable to load albums right now. Please try again.';
-        this.isLoading = false;
-      },
-    });
+    this.albumService.getAlbums();
+     
   }
 
-  getArtistName(album: Album): string {
+  getArtistName(album: IAlbum): string {
     return album.artist?.name?.trim() || 'Unknown artist';
   }
 
@@ -115,11 +111,11 @@ export class Albums implements OnInit {
     return normalized.startsWith('/') ? normalized : `/${normalized}`;
   }
 
-  trackByAlbumId(_: number, album: Album): number {
+  trackByAlbumId(_: number, album: IAlbum): number {
     return album.id;
   }
 
-  onAlbumOpen(album: Album): void {
+  onAlbumOpen(album: IAlbum): void {
     // Placeholder for route navigation to album detail.
     console.log('Open album', album.id);
   }
