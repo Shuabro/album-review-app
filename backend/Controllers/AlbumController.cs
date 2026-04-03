@@ -17,7 +17,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Album>>> GetAllAlbums()
         {
-            var albums = await _albumDataAccess.GetAllAlbumsAsync();
+            var albums = await _albumDataAccess.GetAlbumsWithArtistAsync();
             return Ok(albums);
         }
 

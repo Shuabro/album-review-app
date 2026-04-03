@@ -7,14 +7,14 @@ class Program
     static void Main(string[] args)
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlServer("Server=localhost;Database=AlbumReviewDb;Trusted_Connection=True;TrustServerCertificate=True;")
+            .UseNpgsql("Host=localhost;Database=AlbumReviewDb;Username=postgres;Password=Montezuma1969")
             .Options;
 
         using var context = new AppDbContext(options);
         var importer = new AlbumImporter(context);
         try
         {
-            importer.Import("../backend/Album Review.xlsx"); // Adjust path if needed
+            importer.Import(@"C:\src\album-review-app\backend\powersrankings.xlsx"); // Adjust path if needed
             Console.WriteLine("Import complete!");
         }
         catch (Exception ex)

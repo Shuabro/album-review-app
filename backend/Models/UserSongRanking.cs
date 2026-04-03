@@ -11,7 +11,7 @@ namespace backend.Models
         public int AlbumId { get; set; } // New property for direct album reference
         public int Rank { get; set; }
 
-        public IdentityUser? User { get; set; } // Navigation property
+        public ApplicationUser? User { get; set; } // Navigation property
         public Song? Song { get; set; } // Navigation property
         public Album? Album { get; set; } // Navigation property
     }

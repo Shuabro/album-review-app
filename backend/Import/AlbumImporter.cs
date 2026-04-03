@@ -1,8 +1,10 @@
+using System.Drawing;
 using System.Drawing.Imaging;
 using OfficeOpenXml;
 using backend.Data;
 using backend.Models;
 using backend.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Import
 {
@@ -16,6 +18,7 @@ namespace backend.Import
 
         public void Import(string excelPath)
         {
+            Console.WriteLine("Using database connection: " + _context.Database.GetDbConnection().ConnectionString);
             // If the path is not rooted, assume it's relative to the backend directory
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string resolvedPath = excelPath;
@@ -48,9 +51,9 @@ namespace backend.Import
             var images = worksheet.Drawings.OfType<OfficeOpenXml.Drawing.ExcelPicture>().ToList();
             // Find the last used column in row 2
             int lastCol = worksheet.Dimension.End.Column;
-            // Find the first column to process (G = 7)
-            int firstCol = 7;
-            // Start from lastCol and work backwards to G
+            // Find the first column to process (F = 6)
+            int firstCol = 6;
+            // Start from lastCol and work backwards to F
             for (int col = lastCol; col >= firstCol; col--)
             {
                 if (string.IsNullOrWhiteSpace(worksheet.Cells[2, col].Text))
@@ -109,12 +112,21 @@ namespace backend.Import
                 }
                 var artist = _context.Artists
                     .FirstOrDefault(a => a.Name.ToLower() == artistName.ToLower());
-                                if (artist == null)
-                                {
-                                    artist = new Artist { Name = artistName };
-                                    _context.Artists.Add(artist);
-                                    _context.SaveChanges(); // Ensure Artist gets an Id
-                                }
+                if (artist == null)
+                {
+                    artist = new Artist { Name = artistName };
+                    _context.Artists.Add(artist);
+                    _context.SaveChanges(); // Save to get Artist Id
+                }
+
+                // Check if album already exists
+                var existingAlbum = _context.Albums
+                    .FirstOrDefault(a => a.Title.ToLower() == albumTitle.ToLower() && a.ArtistId == artist.Id);
+                if (existingAlbum != null)
+                {
+                    Console.WriteLine($"Album '{albumTitle}' by '{artistName}' already exists, skipping...");
+                    continue;
+                }
 
                 var album = new Album
                 {
@@ -133,7 +145,17 @@ namespace backend.Import
                 _context.SaveChanges(); // Save album to get its Id
                 Console.WriteLine($"Added album: {albumTitle} by {artistName}");
 
-                string userId = "6a3b6c9b-4c11-411b-8c37-a1cb3fa29faa"; // Fixed user Id
+                var songsToAdd = new List<Song>();
+                var rankingsToAdd = new List<UserSongRanking>();
+                
+                // Get a valid user ID from the database
+                var firstUser = _context.Users.FirstOrDefault();
+                if (firstUser == null)
+                {
+                    Console.WriteLine("No users found in database. Skipping rankings for this album.");
+                    continue;
+                }
+                string userId = firstUser.Id;
                 for (int row = 5; row <= 24; row++)
                 {
                     string songTitle = worksheet.Cells[row, col].Text.Trim();
@@ -148,18 +170,28 @@ namespace backend.Import
                         Title = songTitle,
                         AlbumId = album.Id,
                     };
-                    _context.Songs.Add(song);
-                    _context.SaveChanges(); // Save to get song.Id
+                    songsToAdd.Add(song);
+                }
 
+                // Batch add songs
+                _context.Songs.AddRange(songsToAdd);
+                _context.SaveChanges(); // Save to get song IDs
+
+                // Create rankings after songs have IDs
+                for (int i = 0; i < songsToAdd.Count; i++)
+                {
                     var ranking = new UserSongRanking
                     {
                         UserId = userId,
-                        SongId = song.Id,
+                        SongId = songsToAdd[i].Id,
                         AlbumId = album.Id,
-                        Rank = rank
+                        Rank = i + 1
                     };
-                    _context.UserSongRankings.Add(ranking);
+                    rankingsToAdd.Add(ranking);
                 }
+
+                // Batch add rankings
+                _context.UserSongRankings.AddRange(rankingsToAdd);
             }
             try
             {
