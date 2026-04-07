@@ -1,21 +1,76 @@
 <mat-toolbar color="primary">
   <mat-icon>library_music</mat-icon>
-  <span class="app-title">Country Album Reviews</span>
+  <span class="app-title">Track Miners</span>
   <span class="spacer"></span>
-  <button mat-button routerLink="/home">
+  
+  <!-- Hamburger menu button - mobile only -->
+  <button mat-icon-button class="hamburger-button" (click)="toggleMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  
+  <!-- Desktop navigation buttons -->
+  <div class="desktop-nav">
+    <button mat-button routerLink="/home">
+      <mat-icon>home</mat-icon>
+      Home
+    </button>
+    @if (currentUser$ | async; as user) {
+      <!-- Logged in: show user menu -->
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+        {{ user.firstName || user.email }}
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </mat-menu>
+    } @else {
+      <!-- Logged out: show Albums, Stats, Login -->
+      <button mat-button routerLink="/albums">
+        <mat-icon>album</mat-icon>
+        Albums
+      </button>
+      <button mat-button routerLink="/stats">
+        <mat-icon>analytics</mat-icon>
+        Stats
+      </button>
+      <button mat-button routerLink="/login">
+        <mat-icon>login</mat-icon>
+        Login
+      </button>
+    }
+  </div>
+</mat-toolbar>
+
+<!-- Mobile dropdown menu -->
+<div class="mobile-dropdown" [class.open]="menuOpen">
+  <button mat-button routerLink="/home" (click)="closeMenu()">
     <mat-icon>home</mat-icon>
     Home
   </button>
-  <button mat-button routerLink="/albums">
-    <mat-icon>album</mat-icon>
-    Albums
-  </button>
-  <button mat-button routerLink="/add-album">
-    <mat-icon>add</mat-icon>
-    Add Album
-  </button>
-  <button mat-button routerLink="/stats">
-    <mat-icon>analytics</mat-icon>
-    Stats
-  </button>
-</mat-toolbar>
+  @if (currentUser$ | async) {
+    <button mat-button routerLink="/settings" (click)="closeMenu()">
+      <mat-icon>settings</mat-icon>
+      Settings
+    </button>
+    <button mat-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  } @else {
+    <button mat-button routerLink="/albums" (click)="closeMenu()">
+      <mat-icon>album</mat-icon>
+      Albums
+    </button>
+    <button mat-button routerLink="/stats" (click)="closeMenu()">
+      <mat-icon>analytics</mat-icon>
+      Stats
+    </button>
+    <button mat-button routerLink="/login" (click)="closeMenu()">
+      <mat-icon>login</mat-icon>
+      Login
+    </button>
+  }
+</div>

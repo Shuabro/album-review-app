@@ -1,11 +1,30 @@
 /* App global styles */
 :host {
-  display: flex;
-  flex-direction: column;
+  display: block;
   height: 100vh;
 }
 
-router-outlet {
-  flex: 1;
-  display: block;
+/* Remove any default margins/padding */
+* {
+  box-sizing: border-box;
+}
+
+/* Main content area */
+.main-content {
+  margin-top: 64px; /* Account for navbar height */
+  padding: 1rem;
+  min-height: calc(100vh - 64px);
+  transition: margin-left 0.3s ease;
+}
+
+/* Adjust main content when sidebar is visible */
+.main-content.with-sidebar {
+  margin-left: 280px; /* Sidebar width */
+}
+
+/* Mobile responsive - don't adjust margin on mobile */
+@media (max-width: 768px) {
+  .main-content.with-sidebar {
+    margin-left: 0;
+  }
 }

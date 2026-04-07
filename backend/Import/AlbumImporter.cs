@@ -60,9 +60,7 @@ namespace backend.Import
                     continue;
                 string albumTitle = worksheet.Cells[2, col].Text.Trim();
                 string artistName = worksheet.Cells[3, col].Text.Trim();
-                string ratingStr = worksheet.Cells[1, col].Text.Trim();
-                
-                int.TryParse(ratingStr, out int rating);
+                int rating = worksheet.Cells[1, col].GetValue<int>();
 
                 // Try to find an image in row 4, current column
                 string coverImagePath = string.Empty;

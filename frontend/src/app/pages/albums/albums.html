@@ -4,12 +4,15 @@
 			<h1>Albums</h1>
 			<p class="header-subtitle">Browse and explore your country album collection.</p>
 		</div>
-		<div class="header-count" *ngIf="!isLoading && !errorMessage">
-			{{ visibleAlbums.length }} {{ visibleAlbums.length === 1 ? 'album' : 'albums' }}
-		</div>
+		@if (!isLoading && !errorMessage) {
+			<div class="header-count">
+				{{ visibleAlbums.length }} {{ visibleAlbums.length === 1 ? 'album' : 'albums' }}
+			</div>
+		}
 	</header>
 
-	<section class="controls" *ngIf="!isLoading && !errorMessage">
+	@if (!isLoading && !errorMessage) {
+		<section class="controls">
 		<mat-form-field appearance="outline" class="search-field">
 			<mat-label>Search by album or artist</mat-label>
 			<input matInput [(ngModel)]="searchQuery" placeholder="Type to filter..." />
@@ -25,17 +28,25 @@
 				<mat-option value="mostReviewed">Most reviewed</mat-option>
 			</mat-select>
 		</mat-form-field>
-	</section>
+		</section>
+	}
 
-	<p *ngIf="isLoading" class="status">Loading albums...</p>
+	@if (isLoading) {
+		<p class="status">Loading albums...</p>
+	}
 
-	<p *ngIf="errorMessage" class="status error">{{ errorMessage }}</p>
+	@if (errorMessage) {
+		<p class="status error">{{ errorMessage }}</p>
+	}
 
-	<div *ngIf="!isLoading && !errorMessage && visibleAlbums.length === 0" class="status">
-		No albums found.
-	</div>
+	@if (!isLoading && !errorMessage && visibleAlbums.length === 0) {
+		<div class="status">
+			No albums found.
+		</div>
+	}
 
-	<div class="album-grid" *ngIf="!isLoading && !errorMessage && visibleAlbums.length > 0">
+	@if (!isLoading && !errorMessage && visibleAlbums.length > 0) {
+		<div class="album-grid">
 		<mat-card
 			class="album-card"
 			*ngFor="let album of visibleAlbums; trackBy: trackByAlbumId"
@@ -44,17 +55,19 @@
 			(keydown.enter)="onAlbumOpen(album)"
 		>
 			<div class="cover-wrap">
-				<img
-					*ngIf="album.coverImageUrl; else coverFallback"
-					mat-card-image
-					[src]="getCoverUrl(album.coverImageUrl)"
-					[alt]="album.title + ' cover'"
-				/>
-				<ng-template #coverFallback>
+				@if (album.coverImageUrl) {
+					<img
+						mat-card-image
+						[src]="getCoverUrl(album.coverImageUrl)"
+						[alt]="album.title + ' cover'"
+					/>
+				}
+				@else
+				{
 					<div class="cover-fallback">
 						<mat-icon>album</mat-icon>
 					</div>
-				</ng-template>
+				}
 			</div>
 
 			<mat-card-content class="card-content">
@@ -62,7 +75,9 @@
 				<p class="album-artist">{{ getArtistName(album) }}</p>
 
 				<div class="album-meta">
-					<span *ngIf="album.releaseYear">{{ album.releaseYear }}</span>
+					@if (album.releaseYear) {
+						<span>{{ album.releaseYear }}</span>
+					}
 				</div>
 
 				<!--
@@ -78,4 +93,5 @@
 			</mat-card-content>
 		</mat-card>
 	</div>
+	}
 </section>

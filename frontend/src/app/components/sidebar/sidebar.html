@@ -1,0 +1,89 @@
+<aside class="sidebar" [class.mobile-open]="sidebarOpen">
+  <!-- User Welcome Section -->
+  @if (currentUser$ | async) {
+    <div class="user-welcome-section">
+      <div class="user-avatar">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+      <div class="user-info">
+        <h3>Welcome back, {{ getCurrentUserName() }}!</h3>
+        <p>Ready to discover new music?</p>
+      </div>
+    </div>
+  }
+  
+  <!-- Primary Action -->
+  <div class="primary-section">
+    <button mat-raised-button color="accent" class="add-album-btn" (click)="addAlbum()">
+      <mat-icon>add</mat-icon>
+      Add Album
+    </button>
+  </div>
+
+  <!-- Navigation Section -->
+  <div class="navigation-section">
+    <h4>Dashboard</h4>
+    <button mat-button class="nav-item" routerLink="/">
+      <mat-icon>dashboard</mat-icon>
+      Overview
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="navigation-section">
+    <h4>My Music</h4>
+    <button mat-button class="nav-item" (click)="myReviews()">
+      <mat-icon>rate_review</mat-icon>
+      My Reviews
+    </button>
+    <button mat-button class="nav-item" (click)="myTopAlbums()">
+      <mat-icon>star</mat-icon>
+      My Top Albums
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="navigation-section">
+    <h4>Explore</h4>
+    <button mat-button class="nav-item" (click)="browseAlbums()">
+      <mat-icon>library_music</mat-icon>
+      Browse Albums
+    </button>
+    <button mat-button class="nav-item" (click)="search()">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="navigation-section">
+    <h4>Profile</h4>
+    <button mat-button class="nav-item" (click)="myStats()">
+      <mat-icon>bar_chart</mat-icon>
+      My Stats
+    </button>
+    <button mat-button class="nav-item" (click)="settings()">
+      <mat-icon>settings</mat-icon>
+      Settings
+    </button>
+  </div>
+
+  <!-- Logout Section -->
+  <div class="logout-section">
+    <button mat-button class="logout-btn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile Controls -->
+<button mat-fab color="primary" class="mobile-sidebar-toggle" [class.hidden]="sidebarOpen" (click)="toggleSidebar()">
+  <mat-icon>menu</mat-icon>
+</button>
+
+<!-- Mobile Overlay -->
+<div class="mobile-overlay" [class.open]="sidebarOpen" (click)="closeSidebar()"></div>

@@ -1,0 +1,59 @@
+<form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+  <h2>Login</h2>
+  
+  <!-- Debug info -->
+  @if (true) {
+    <div class="debug-info">
+      <small>Debug: Form valid: {{loginForm.valid}} | Loading: {{loading}}</small>
+    </div>
+  }
+  
+  <!-- Error message -->
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+  
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input 
+      id="email" 
+      name="email" 
+      type="email" 
+      required 
+      [(ngModel)]="email" 
+      [disabled]="loading"
+    />
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input 
+      id="password" 
+      name="password" 
+      type="password" 
+      required 
+      [(ngModel)]="password" 
+      [disabled]="loading"
+    />
+  </div>
+  
+  <div class="form-group remember-me">
+    <input 
+      id="rememberMe" 
+      name="rememberMe" 
+      type="checkbox" 
+      [(ngModel)]="rememberMe" 
+      [disabled]="loading"
+    />
+    <label for="rememberMe">Remember me</label>
+  </div>
+  
+  <button 
+    type="submit" 
+    [disabled]="loading || !loginForm.valid"
+  >
+    {{ loading ? 'Logging in...' : 'Login' }}
+  </button>
+</form>

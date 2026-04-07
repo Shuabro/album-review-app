@@ -48,7 +48,67 @@ mat-toolbar button mat-icon {
   height: 18px;
 }
 
-/* Responsive adjustments */
+/* Hamburger menu button - hidden on desktop */
+.hamburger-button {
+  display: none;
+}
+
+/* Desktop navigation */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+}
+
+/* Mobile dropdown menu */
+.mobile-dropdown {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.mobile-dropdown.open {
+  display: flex;
+}
+
+.mobile-dropdown button {
+  width: 100%;
+  justify-content: flex-start;
+  margin: 4px 0;
+  padding: 12px 16px;
+  color: #333;
+  border-radius: 4px;
+}
+
+.mobile-dropdown button:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+
+/* Desktop responsive styles */
+@media (min-width: 769px) {
+  /* Ensure hamburger is hidden on desktop */
+  .hamburger-button {
+    display: none !important;
+  }
+  
+  /* Ensure desktop nav is visible */
+  .desktop-nav {
+    display: flex;
+  }
+  
+  /* Hide mobile dropdown on desktop */
+  .mobile-dropdown {
+    display: none !important;
+  }
+}
+
+/* Mobile responsive styles */
 @media (max-width: 768px) {
   .app-title {
     font-size: 1rem;
@@ -59,13 +119,13 @@ mat-toolbar button mat-icon {
     padding: 0 8px;
   }
   
-  mat-toolbar button {
-    margin-left: 4px;
-    padding: 6px 12px;
-    font-size: 13px;
+  /* Hide desktop navigation on mobile */
+  .desktop-nav {
+    display: none;
   }
   
-  mat-toolbar button span {
-    display: none;
+  /* Show hamburger button on mobile */
+  .hamburger-button {
+    display: flex;
   }
 }

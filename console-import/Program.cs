@@ -35,17 +35,21 @@ namespace ConsoleImport
             // Extract album data from spreadsheet
             var albums = ExtractAlbumsFromSpreadsheet("minorrankings.xlsx");
 
-            // Get a valid user ID from the database  
-            var firstUser = dbContext.Users.FirstOrDefault();
-            if (firstUser == null)
+            // Get the second user from the database  
+            var secondUser = dbContext.Users.Skip(1).FirstOrDefault();
+            if (secondUser == null)
             {
-                Console.WriteLine("No users found in database. Please run UserSeeder first.");
+                Console.WriteLine("Second user not found in database. Please ensure there are at least 2 users.");
                 return;
             }
-            string userId = firstUser.Id;
+            string userId = secondUser.Id;
 
             Console.WriteLine($"Found {albums.Count} albums in spreadsheet.");
-            Console.WriteLine($"Processing rankings for user: {firstUser.UserName}\n");
+            Console.WriteLine($"Processing rankings for user: {secondUser.UserName}\n");
+
+            var allProcessedSongs = new List<string>();
+            var allMatchedSongs = new List<string>();
+            var allUnmatchedSongs = new List<string>();
 
             try
             {
@@ -58,6 +62,23 @@ namespace ConsoleImport
                     // Process this single album
                     var result = importer.ProcessAlbumFromSpreadsheet(album.AlbumName, album.Songs, userId);
                     
+                    // Track songs for final summary
+                    foreach (var song in album.Songs)
+                    {
+                        allProcessedSongs.Add($"{album.AlbumName}: {song}");
+                    }
+                    foreach (var match in result.SongMatches)
+                    {
+                        if (match.MatchedSong != null)
+                        {
+                            allMatchedSongs.Add($"{album.AlbumName}: {match.ImportTitle} → {match.MatchedSong.Title}");
+                        }
+                        else
+                        {
+                            allUnmatchedSongs.Add($"{album.AlbumName}: {match.ImportTitle}");
+                        }
+                    }
+                    
                     // Display results summary
                     if (result.MatchedAlbum != null)
                     {
@@ -69,10 +90,65 @@ namespace ConsoleImport
                     Console.WriteLine("\n");
                 }
 
+                // Check existing records before saving
+                int existingCount = dbContext.UserSongRankings.Count(r => r.UserId == userId);
+                Console.WriteLine($"\n📊 Before import: {existingCount} existing rankings for this user");
+
                 // Save all changes to database
                 Console.WriteLine("Saving all rankings to database...");
                 int savedCount = dbContext.SaveChanges();
-                Console.WriteLine($"✅ Saved {savedCount} rankings to database!");
+                
+                int finalCount = dbContext.UserSongRankings.Count(r => r.UserId == userId);
+                Console.WriteLine($"✅ Added {savedCount} new rankings to database!");
+                Console.WriteLine($"📊 After import: {finalCount} total rankings for this user");
+                
+                // Check which songs from database don't have rankings
+                var totalSongsInDb = dbContext.Songs.Count();
+                var songsWithRankings = dbContext.UserSongRankings
+                    .Where(r => r.UserId == userId)
+                    .Select(r => r.SongId)
+                    .ToHashSet();
+                
+                var songsWithoutRankings = dbContext.Songs
+                    .Include(s => s.Album)
+                    .Where(s => !songsWithRankings.Contains(s.Id))
+                    .Select(s => new { s.Title, AlbumTitle = s.Album.Title })
+                    .ToList();
+                
+                Console.WriteLine($"\n📀 Total songs in database: {totalSongsInDb}");
+                Console.WriteLine($"🎵 Songs with rankings: {songsWithRankings.Count}");
+                Console.WriteLine($"❓ Songs without rankings: {songsWithoutRankings.Count}");
+                
+                if (songsWithoutRankings.Any())
+                {
+                    Console.WriteLine($"\n🔍 SONGS WITHOUT RANKINGS ({songsWithoutRankings.Count}):");
+                    foreach (var song in songsWithoutRankings)
+                    {
+                        Console.WriteLine($"  • {song.AlbumTitle}: {song.Title}");
+                    }
+                }
+                
+                // Final summary
+                Console.WriteLine($"\n=== FINAL SUMMARY ===");
+                Console.WriteLine($"📋 Total songs from spreadsheet: {allProcessedSongs.Count}");
+                Console.WriteLine($"✅ Songs matched and saved: {allMatchedSongs.Count}");
+                Console.WriteLine($"❌ Songs not matched: {allUnmatchedSongs.Count}");
+                Console.WriteLine($"💾 Database records created: {savedCount}");
+                
+                if (allUnmatchedSongs.Any())
+                {
+                    Console.WriteLine($"\n🔍 UNMATCHED SONGS ({allUnmatchedSongs.Count}):");
+                    foreach (var unmatched in allUnmatchedSongs)
+                    {
+                        Console.WriteLine($"  • {unmatched}");
+                    }
+                }
+                
+                if (allProcessedSongs.Count != savedCount)
+                {
+                    Console.WriteLine($"\n⚠️  MISMATCH: Expected {allProcessedSongs.Count} total, but saved {savedCount}");
+                    Console.WriteLine($"   Missing: {allProcessedSongs.Count - savedCount} song(s)");
+                }
             }
             catch (Exception ex)
             {
