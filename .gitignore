@@ -4,3 +4,7 @@
 *.dll
 *.exe
 *.pdb
+
+# App settings (contain secrets)
+backend/appsettings.json
+backend/appsettings.Development.json
