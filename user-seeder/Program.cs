@@ -14,8 +14,15 @@ namespace UserSeeder
         {
             var services = new ServiceCollection();
             services.AddLogging();
+            // WARNING: Sensitive connection string removed. Use environment variables or user-secrets in production.
+            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                Console.WriteLine("ERROR: CONNECTION_STRING environment variable is not set.");
+                return;
+            }
             services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql("Host=localhost;Database=AlbumReviewDb;Username=postgres;Password=Montezuma1969"));
+                options.UseNpgsql(connectionString));
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 

@@ -14,9 +14,15 @@ namespace ConsoleImport
     {
         static void Main(string[] args)
         {
-            // Configure DbContext with connection options
+            // Configure DbContext with connection options from environment variable
+            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                Console.WriteLine("ERROR: CONNECTION_STRING environment variable is not set.");
+                return;
+            }
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseNpgsql("Host=localhost;Database=AlbumReviewDb;Username=postgres;Password=Montezuma1969")
+                .UseNpgsql(connectionString)
                 .Options;
 
             AppDbContext? dbContext = null;

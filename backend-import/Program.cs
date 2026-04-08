@@ -6,8 +6,14 @@ class Program
 {
     static void Main(string[] args)
     {
+        var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            Console.WriteLine("ERROR: CONNECTION_STRING environment variable is not set.");
+            return;
+        }
         var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseNpgsql("Host=localhost;Database=AlbumReviewDb;Username=postgres;Password=Montezuma1969")
+            .UseNpgsql(connectionString)
             .Options;
 
         using var context = new AppDbContext(options);

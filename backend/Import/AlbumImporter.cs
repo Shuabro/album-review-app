@@ -1,3 +1,6 @@
+// WARNING: Do not commit or push this file if it contains sensitive user data (emails, passwords, etc.).
+// Consider adding user-seeder/ or this file to your .gitignore if you want to keep it local only.
+
 using System.Drawing;
 using System.Drawing.Imaging;
 using OfficeOpenXml;
