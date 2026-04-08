@@ -64,6 +64,25 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 builder.Services.AddScoped<backend.DataAccess.AlbumDataAccess>();
+builder.Services.AddScoped<backend.Services.AlbumImportService>();
+// In-memory cache for MusicBrainz responses to reduce repeated requests and avoid throttling
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<backend.Services.CloudinaryService>();
+
+// MusicBrainz HTTP client
+// MB requires a descriptive User-Agent: https://musicbrainz.org/doc/MusicBrainz_API/Rate_Limiting
+builder.Services.AddHttpClient<backend.Clients.MusicBrainzClient>(client =>
+{
+    client.BaseAddress = new Uri("https://musicbrainz.org/ws/2/");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("AlbumReviewApp/1.0 (jpowerscts@gmail.com)");
+    client.Timeout = TimeSpan.FromSeconds(30);
+}).ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+{
+    SslOptions = new System.Net.Security.SslClientAuthenticationOptions
+    {
+        RemoteCertificateValidationCallback = (_, _, _, _) => true
+    }
+});
 
 // CORS configuration for frontend
 builder.Services.AddCors(options =>

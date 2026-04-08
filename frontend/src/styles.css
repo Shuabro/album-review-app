@@ -6,3 +6,16 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Alert snackbar styles — must be global because Material renders in an overlay */
+.alert-snack-success .mat-mdc-snack-bar-label { color: #fff; }
+.alert-snack-success { --mdc-snackbar-container-color: #2e7d32; }
+
+.alert-snack-error .mat-mdc-snack-bar-label { color: #fff; }
+.alert-snack-error { --mdc-snackbar-container-color: #c62828; }
+
+.alert-snack-info .mat-mdc-snack-bar-label { color: #fff; }
+.alert-snack-info { --mdc-snackbar-container-color: #1565c0; }
+
+.alert-snack-warning .mat-mdc-snack-bar-label { color: #000; }
+.alert-snack-warning { --mdc-snackbar-container-color: #f9a825; }

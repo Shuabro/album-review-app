@@ -9,6 +9,7 @@
     <UserSecretsId>aa7e868c-c4d9-4a7f-b7db-8381d5a6ec9b</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.28.0" />
     <PackageReference Include="EPPlus" Version="7.1.1" />
     <PackageReference Include="FuzzySharp" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />

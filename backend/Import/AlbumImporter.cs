@@ -62,39 +62,11 @@ namespace backend.Import
                 string artistName = worksheet.Cells[3, col].Text.Trim();
                 int rating = worksheet.Cells[1, col].GetValue<int>();
 
-                // Try to find an image in row 4, current column
+                // Set Cloudinary URL for cover image using legacy naming
                 string coverImagePath = string.Empty;
-                var image = images.FirstOrDefault(img => img.From.Row == 3 && img.From.Column == col - 1); // EPPlus is 0-based
-                if (image != null)
-                {
-                    using var imgStream = new MemoryStream(image.Image.ImageBytes);
-                    using var img = Image.FromStream(imgStream);
-
-                    var format = img.RawFormat;
-                    var ext = "png";
-
-                    if (ImageFormat.Jpeg.Equals(format)) ext = "jpg";
-                    else if (ImageFormat.Gif.Equals(format)) ext = "gif";
-                    else if (ImageFormat.Bmp.Equals(format)) ext = "bmp";
-                    else if (ImageFormat.Png.Equals(format)) ext = "png";
-
-                    var safeAlbumTitle = SanitizeFileName(albumTitle);
-                    var safeArtistName = SanitizeFileName(artistName);
-
-                    var fileName = $"{safeAlbumTitle}_{safeArtistName}.{ext}";
-
-                    var relativeDir = Path.Combine("Data", "AlbumCovers");
-                    var absoluteDir = Path.Combine(AppContext.BaseDirectory, relativeDir);
-
-                    Directory.CreateDirectory(absoluteDir);
-
-                    var savePath = Path.Combine(absoluteDir, fileName);
-
-                    img.Save(savePath, format);
-                    Console.WriteLine($"Saved album cover image to: {savePath}");
-
-                    coverImagePath = Path.Combine(relativeDir, fileName);
-                }
+                var publicId = backend.Utils.MediaNaming.GeneratePublicId(albumTitle, artistName);
+                var cloudName = "dpqunw7nj"; // from appsettings.Development.json
+                coverImagePath = $"https://res.cloudinary.com/{cloudName}/image/upload/album-covers/{publicId}";
 
                 static string SanitizeFileName(string value)
                 {

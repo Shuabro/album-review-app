@@ -45,7 +45,8 @@ export class SidebarComponent {
 
   // Navigation actions
   addAlbum() {
-    console.log('➕ Sidebar: Add Album clicked - would navigate to MusicBrainz search');
+    this.router.navigate(['/albums/add']);
+    this.closeSidebar();
   }
 
   myReviews() {

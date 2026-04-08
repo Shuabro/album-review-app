@@ -1,1 +1,204 @@
-<p>add-album works!</p>
+<div class="add-album-container">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>Add Album</h1>
+    <p class="page-subtitle">Search for an album by artist and title, review the best match, then add it to your library.</p>
+  </div>
+
+  <!-- Search Form -->
+  <mat-card class="search-card">
+    <mat-card-content>
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Artist Name</mat-label>
+          <input matInput formControlName="artistName" placeholder="e.g. Chris Stapleton" />
+          @if (artistName?.invalid && artistName?.touched) {
+            <mat-error>Artist name is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Album Name</mat-label>
+          <input matInput formControlName="albumName" placeholder="e.g. Traveller" />
+          @if (albumName?.invalid && albumName?.touched) {
+            <mat-error>Album name is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon>search</mat-icon>
+            Search
+          </button>
+          @if (searchSubmitted) {
+            <button mat-stroked-button type="button" (click)="onReset()">
+              <mat-icon>close</mat-icon>
+              Clear
+            </button>
+          }
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading Spinner -->
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Searching for album…</p>
+    </div>
+  }
+
+  <!-- Search Results -->
+  @if (!loading && searchResult) {
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- Best Match Card -->
+    <section class="result-section">
+      <h2>Best Match</h2>
+
+      <mat-card class="candidate-card best-match-card"
+                [class.selected]="selectedCandidate?.externalId === searchResult.bestMatch.externalId">
+        <mat-card-content>
+          <div class="candidate-row">
+
+            <!-- Cover Image -->
+            <div class="candidate-cover">
+              <div class="cover-placeholder">
+                <mat-icon>album</mat-icon>
+              </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="candidate-info">
+              <div class="candidate-title">{{ searchResult.bestMatch.title }}</div>
+              <div class="candidate-artist">{{ searchResult.bestMatch.artistName }}</div>
+              @if (searchResult.bestMatch.releaseYear) {
+                <div class="candidate-meta">{{ searchResult.bestMatch.releaseYear }}</div>
+              }
+              @if (searchResult.bestMatch.trackCount) {
+                <div class="candidate-meta">{{ searchResult.bestMatch.trackCount }} tracks</div>
+              }
+              @if (searchResult.bestMatch.disambiguation) {
+                <div class="candidate-meta muted">{{ searchResult.bestMatch.disambiguation }}</div>
+              }
+              @if (searchResult.bestMatch.score != null) {
+                <div class="candidate-score">
+                  <mat-icon>verified</mat-icon> Match score: {{ searchResult.bestMatch.score }}%
+                </div>
+              }
+            </div>
+
+          </div>
+
+          <!-- Track List -->
+          @if (searchResult.bestMatch.tracks && searchResult.bestMatch.tracks.length > 0) {
+            <div class="track-list">
+              <mat-divider></mat-divider>
+              @for (track of searchResult.bestMatch.tracks; track track.position) {
+                <div class="track-row">
+                  <span class="track-position">{{ track.position }}</span>
+                  <span class="track-title">{{ track.title }}</span>
+                  @if (track.durationMs) {
+                    <span class="track-duration">{{ formatDuration(track.durationMs) }}</span>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </section>
+
+    <!-- Other Matches (placeholder for future expansion) -->
+    <!-- TODO: Render otherMatches when the backend returns multiple candidates.
+               Each card should call onSelectCandidate(candidate) on click. -->
+    @if (searchResult.otherMatches && searchResult.otherMatches.length > 0) {
+      <section class="result-section">
+        <h2>Other Matches</h2>
+        @for (candidate of searchResult.otherMatches; track candidate.externalId) {
+          <mat-card class="candidate-card"
+                    [class.selected]="selectedCandidate?.externalId === candidate.externalId"
+                    (click)="onSelectCandidate(candidate)"
+                    role="button"
+                    tabindex="0">
+            <mat-card-content>
+              <div class="candidate-row">
+                <div class="candidate-cover">
+                  @if (candidate.coverImageUrl) {
+                    <img [src]="candidate.coverImageUrl" alt="Album cover" />
+                  } @else {
+                    <div class="cover-placeholder"><mat-icon>album</mat-icon></div>
+                  }
+                </div>
+                <div class="candidate-info">
+                  <div class="candidate-title">{{ candidate.title }}</div>
+                  <div class="candidate-artist">{{ candidate.artistName }}</div>
+                  @if (candidate.releaseYear) {
+                    <div class="candidate-meta">{{ candidate.releaseYear }}</div>
+                  }
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </section>
+    }
+
+    <!-- Confirm / Save Section -->
+    <section class="confirm-section">
+      @if (!saveSuccess) {
+        <mat-form-field appearance="outline" class="genre-field">
+          <mat-label>Genre</mat-label>
+          <mat-select [(value)]="selectedGenre">
+            <mat-option [value]="null">— None —</mat-option>
+            @for (genre of genres; track genre.value) {
+              <mat-option [value]="genre.value">{{ genre.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button
+                color="accent"
+                [disabled]="!selectedCandidate || saveInProgress"
+                (click)="onSave()">
+          @if (saveInProgress) {
+            <mat-spinner diameter="20" class="inline-spinner"></mat-spinner>
+          } @else {
+            <mat-icon>library_add</mat-icon>
+          }
+          Add to Library
+        </button>
+      }
+
+      <!-- Success Message -->
+      @if (saveSuccess) {
+        <div class="success-message">
+          <mat-icon>check_circle</mat-icon>
+          <span>
+            <strong>{{ selectedCandidate?.title }}</strong> has been added to your library!
+          </span>
+          <!-- TODO: Add router navigation buttons, e.g.:
+               <button mat-button routerLink="/albums">Browse Albums</button>
+               <button mat-button routerLink="/">Dashboard</button> -->
+          <button mat-stroked-button (click)="onReset()">Add Another</button>
+        </div>
+      }
+    </section>
+
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage) {
+    <div class="error-message">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+</div>
+
